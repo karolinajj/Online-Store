@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Product - Admin Panel</title>
+  </head>
+  <body>
+    <h1>Edit Product - Admin Panel</h1>
+
+    <div id="edit-product-form">
+      <label for="productName">Name:</label>
+      <input type="text" id="productName" />
+      <label for="productDescription">Description:</label>
+      <input type="text" id="productDescription" />
+      <label for="productPrice">Price:</label>
+      <input type="number" id="productPrice" step="0.01" />
+      <input id="productId" type="text" hidden=""/>
+      <button onclick="modifyProduct()">Modify Product</button>      
+    </div>
+
+    <script>
+      function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`),
+              results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+      }
+
+      async function getProduct() {
+        try {
+          const productId = getParameterByName("productId");
+          const response = await fetch("/products/" + productId);
+          const product = await response.json();
+          console.log(product);
+          document.getElementById("productName").value = product.name;
+          document.getElementById("productDescription").value = product.description;
+          document.getElementById("productPrice").value = product.price;
+          document.getElementById("productId").value = product._id;
+        } catch (error) {
+          console.error(error);
+          alert("Error. Please try again.");
+        }
+      }
+
+      async function modifyProduct() {
+        const productName = document.getElementById("productName").value;
+        const productDescription = document.getElementById("productDescription").value;
+        const productPrice = document.getElementById("productPrice").value;
+        const productId = document.getElementById("productId").value;
+
+        if (!productName || !productDescription || !productPrice) {
+          alert("All fields are required.");
+          return;
+        }
+        try {
+          const response = await fetch("/products/modify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              _id: productId,
+              name: productName,
+              description: productDescription,
+              price: parseFloat(productPrice),
+            }),
+          });
+
+          if (response.ok) {
+            alert("Product modified successfully!");
+            window.location.replace("/admin");
+          } else {
+            alert("Error. Please try again.");
+          }
+        } catch (error) {
+          console.error(error);
+          alert("Error. Please try again.");
+        }
+      }
+
+      window.onload = getProduct;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Online Store - Anonymous User</title>
+</head>
+<body>
+  <h1>Simple Online Store - Anonymous User</h1>
+
+
+  <label for="search">Search:</label>
+  <input type="text" id="search" placeholder="Search for products">
+  <button onclick="searchProducts()">Search</button>
+  <button onclick="browseStore()">Browse Store</button>
+
+  <div id="results">
+  </div>
+
+  <script>
+    async function browseStore() {
+      const response = await fetch('/products');
+      const products = await response.json();
+      displayResults(products);
+    }
+
+    async function searchProducts() {
+      const query = document.getElementById('search').value;
+      const response = await fetch(`/products/search?query=${query}`);
+      const products = await response.json();
+      displayResults(products);
+    }
+
+    function displayResults(products) {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      products.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('product');
+        productDiv.innerHTML = `
+          <h3>${product.name}</h3>
+          <p>${product.description}</p>
+          <p>Price: $${product.price.toFixed(2)}</p>
+        `;
+        resultsDiv.appendChild(productDiv);
+      });
+    }
+  </script>
+</body>
+</html>
