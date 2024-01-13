@@ -81,12 +81,30 @@
       width: 300px;
       color: black;
     }
+
+    #usersList {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 1200px;
+        margin: 20px auto;
+    }
+  
+    .user {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px;
+        width: 300px;
+        color: black;
+    }
   </style>
 </head>
 <body>
   <div class="top-buttons">
-    <button onclick="">Users</button> <!-- tutaj dodaj funkcję do przeglądania userów z kontem -->
-    <button onclick="">Orders</button> <!-- tutaj dodaj funckję do przeglądania zamówień -->
+    <button onclick="users()">Users</button>
+    <button onclick="orders()">Orders</button>
   </div>
   <h1>Add Product</h1>
   <div class="add-product-form">
@@ -96,8 +114,8 @@
     <input type="text" id="productDescription" />
     <label for="productPrice">Product Price:</label>
     <input type="number" id="productPrice" step="0.01" />
-    <button onclick="addProduct()">Add Product</button>
   </div>
+  <button onclick="addProduct()">Add Product</button>
   <h1>Products:</h1>
 
   <div id="productList"></div>
@@ -196,6 +214,15 @@
 
     async function editProduct(productId) {
       window.location.replace("/admin/product-edit?productId=" + productId);
+    }
+    
+    async function users(){
+      window.location.href = 'show-users';
+    }
+
+    async function orders(){
+      //to do
+      //window.location.href = 'orders';
     }
 
     window.onload = displayProductList;
