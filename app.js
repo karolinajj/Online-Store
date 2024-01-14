@@ -4,9 +4,11 @@ const mongoose = require('mongoose');
 const path = require('path')
 const app = express();
 app.use(express.static('views'));
-const PORT = process.env.PORT || 5000;
+//const PORT = process.env.PORT || 5000; //Hanna
+//const PORT = process.env.PORT || 3000; //Karolina
 
 mongoose.connect('mongodb://127.0.0.1/sklep', { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect('mongodb://localhost/sklep', { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
 const Product = mongoose.model('Product', {
