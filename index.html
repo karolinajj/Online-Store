@@ -45,13 +45,16 @@
     function selectRole(role) {
       switch (role) {
         case 'anon':
-          window.location.href = 'anon'
+          window.location.href = 'anon';
           break;
         case 'user':
-          window.location.href = 'user';
-          break;
+          //jeśli użytkownik niezalogowany
+            //window.location.href = 'sign-up';
+            window.location.href = 'sign-in';
+            break;
+
         case 'admin':
-          window.location.href = 'admin';
+          window.location.href = 'sign-in-admin';
           break;
         default:
           break;

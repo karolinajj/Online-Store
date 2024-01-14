@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Store - Sign-in (admin)</title>
+  <style>
+    body {
+      background-color: rgb(35, 34, 41);
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      text-align: center;
+      color: aliceblue;
+      margin-top: 30vh;
+    }
+
+    h1 {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    label {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+
+    input {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 20px;
+      margin: 10px;
+      font-size: 20px;
+      border-radius: 20px;
+      height: 20px;
+      line-height: 0px;
+      vertical-align: middle;
+      background-color: rgb(219, 209, 209);
+      font-family: 'Gill Sans';
+      cursor: pointer;
+    }
+
+    #results {
+      margin-top: 20px;
+    }
+
+    .product {
+      background-color: aliceblue;
+      color:black;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .sign-in-form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    p {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+    <h1>Online Store - Sign in (admin)</h1>
+
+    <div class="sign-in-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Username">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Password">
+    </div>
+    <div><button onclick="signIn()">Sign in</button></div>
+
+  <script>
+    //to do
+    async function signIn() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      //jeśli udało się zalogować
+        signedIn();
+      //else
+
+    }
+
+    function signedIn() {
+        window.location.href = 'admin';
+    }
+  </script>
+</body>
+</html>
