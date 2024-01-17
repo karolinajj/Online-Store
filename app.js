@@ -20,20 +20,12 @@ const Product = mongoose.model('Product', {
 const User = mongoose.model('User', {
   username: String,
   password: String,
-  cart: [{
-    name: String,
-    description: String,
-    price: Number,
-  }]
 })
 
 const Order = mongoose.model('Order',{
   username: String,
-  cart: [{
-    name: String,
-    description: String,
-    price: Number,
-  }]
+  productName: String,
+  productPrice: Number
 })
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -74,6 +66,10 @@ app.get('/cart', (req, res) => {
 
 app.get('/show-users', (req, res) => {
   res.sendFile(path.join(__dirname, '/views/users.html'))
+})
+
+app.get('/show-orders', (req, res) => {
+  res.sendFile(path.join(__dirname, '/views/orders.html'))
 })
 
 app.get('/admin/product-edit', async (req, res) => {
@@ -222,6 +218,7 @@ app.post('/users/delete', async (req, res) => {
 app.get('/users', async (req, res) => {
   try {
     const users = await User.find();
+
     res.json(users);
   } catch (error) {
     console.error(error);
@@ -229,35 +226,61 @@ app.get('/users', async (req, res) => {
   }
 });
 
-//to fix
-/*app.get('/orders', async (req, res) => {
+app.get('/orders', async (req, res) => {
   try {
-    const users = await User.find();
-    const carts = [];
-    for (let i = 0; i < users.length; i++){
-      carts[i] = users[i].cart;
-    }
-    res.json(users, carts);
+    const orders = await Order.find();
+
+    res.json(orders);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-});*/
+});
+
+app.post('/orders/delete', async (req, res) => {
+  const orderId = req.body.orderId;
+
+  if (!orderId) {
+    return res.status(400).json({ error: 'Order ID is required.' });
+  }
+  console.log(orderId)
+
+  try {
+    const deletedOrder = await Order.findByIdAndDelete(orderId);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ error: 'Order not found.' });
+    }
+
+    res.status(200).json({ message: 'Order deleted successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 
 
 
 //testing
-
-/*var username = "username"
-var password = "PSWD"
-var cart = []
-const newUser = new User({
-  username, password, cart
-});
-
-newUser.save();*/
-
+/*for (let i=0; i<3; i++){
+  var username = "username" + i;
+  var password = "PSWD";
+  var productName = "product name "  + i;
+  var productPrice =  i;
+  
+  const newUser = new User({
+    username, password
+  });
+  
+  newUser.save();
+  
+  const newOrder = new Order({
+    username, productName, productPrice
+  });
+  newOrder.save();
+}*/
 
 //Server
 app.listen(PORT, () => {
