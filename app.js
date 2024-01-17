@@ -28,8 +28,14 @@ const Order = mongoose.model('Order',{
   productPrice: Number
 })
 
+const CartItem = mongoose.model('CartItem',{
+  name: String,
+  price: Number
+})
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 
 //Views
 app.get('/', (req, res) => {
@@ -72,6 +78,11 @@ app.get('/show-orders', (req, res) => {
   res.sendFile(path.join(__dirname, '/views/orders.html'))
 })
 
+app.get('/place-order', async (req, res) => {
+  res.sendFile(path.join(__dirname, '/views/place-order.html'))
+})
+
+
 app.get('/admin/product-edit', async (req, res) => {
   const productId = req.query.productId;
   try {
@@ -82,7 +93,6 @@ app.get('/admin/product-edit', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 
 //Anonymous user
@@ -118,11 +128,62 @@ app.get('/products/:productId', async (req, res) => {
   }
 });
 
+
 //User
-//adding to cart
-//deleting from cart
-//sign-in
-//sign-up
+app.get('/current-cart', async (req, res) => {
+  try {
+    const cart = await CartItem.find();
+    res.json(cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/current-cart/delete', async (req, res) => {
+  const cartItemId = req.body.cartItemId;
+
+  if (!cartItemId) {
+    return res.status(400).json({ error: 'Item ID is required.' });
+  }
+  console.log(cartItemId)
+
+  try {
+    const deletedItem = await CartItem.findByIdAndDelete(cartItemId);
+
+    if (!deletedItem) {
+      return res.status(404).json({ error: 'Cart item not found.' });
+    }
+
+    res.status(200).json({ message: 'Cart item deleted successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/current-cart/add', async (req, res) => {
+  const { name, price } = req.body;
+
+  if (!name || !price) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+
+  try {
+    const newCartItem = new CartItem({
+      name,
+      price
+    });
+
+    const savedItem = await newCartItem.save();
+
+    res.status(201).json(savedItem);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 //Admin
 app.post('/products/add', async (req, res) => {
@@ -237,6 +298,29 @@ app.get('/orders', async (req, res) => {
   }
 });
 
+app.post('/orders/add', async (req, res) => {
+  const { username, productName, productPrice } = req.body;
+
+  if (!username || !productName || !productPrice) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+
+  try {
+    const newOrder = new Order({
+      username,
+      productName,
+      productPrice
+    });
+
+    const savedOrder = await newOrder.save();
+
+    res.status(201).json(savedOrder);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.post('/orders/delete', async (req, res) => {
   const orderId = req.body.orderId;
 
@@ -260,11 +344,17 @@ app.post('/orders/delete', async (req, res) => {
 });
 
 
+//some example tests
 
+/*let name = "nazwa produktu do koszyka"
+let price = 5
+const newCartItem = new CartItem({
+  name,
+  price
+});
+newCartItem.save()
 
-
-//testing
-/*for (let i=0; i<3; i++){
+for (let i=0; i<3; i++){
   var username = "username" + i;
   var password = "PSWD";
   var productName = "product name "  + i;

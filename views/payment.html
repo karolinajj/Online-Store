@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Online Store - Your Cart</title>
+  <title>Online Store - Payment</title>
   <style>
     body {
       background-color: rgb(35, 34, 41);
@@ -64,6 +64,82 @@
 </head>
 <body>
     <h1>Here you would pay for your products, if only it was implemented.</h1>
+    <p>But you can place your order without paying below:</p>
+    <button onclick="placeOrder()">Place your order</button>
+    <div id="placed"></div>
+    <script>
+    async function placeOrder() {
+      const response = await fetch('/current-cart');
+      const cart = await response.json();
+
+      cart.forEach(item => {
+        username = "To jest testowa nazwa uzytkownika";
+        addToOrder(item, username)
+        deleteItem(item._id)
+      });
+
+      afterPlacing();
+    }
+    
+    async function deleteItem(cartItemId) {
+      try {
+        const response = await fetch("/current-cart/delete", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cartItemId: cartItemId,
+          }),
+        });
+
+        if (response.ok) {
+        } else {
+          alert("Error. Please try again.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error. Please try again.");
+      }
+    }
+
+    async function addToOrder(item, username){
+      if (!item|| !username) {
+        alert("All fields are required.");
+        return;
+      }
+      try {
+        const response = await fetch("/orders/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: username,
+            productName: item.name,
+            productPrice: item.price,
+          }),
+        });
+
+        if (response.ok) {
+        } else {
+          alert("Error. Please try again.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error. Please try again.");
+      }
+    }
+
+    function afterPlacing(){
+      const resultsDiv = document.getElementById('placed');
+      resultsDiv.innerHTML = '<p>Order placed. The admin can see your order via order list. Your cart is empty now.</p><button onclick="mainMenu()">Back to browsing</button>';
+    }
+
+    function mainMenu(){
+      window.location.href = "user";
+    }
+    </script>
   </body>
   </html>
   

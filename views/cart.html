@@ -57,6 +57,15 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
+    .cart-item {
+      background-color: aliceblue;
+      color:black;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
     p {
       margin-bottom: 5px;
     }
@@ -64,33 +73,66 @@
 </head>
 <body>
     <h1>Your Cart</h1>
+    <div id="cart"></div>
   
     <script>
-      //to do
-        /*async function displayCart() {
-          const response = await fetch('/cart'); // something else here
-          const cartItems = await response.json();
-          const cartItemsDiv = document.getElementById('cart-items');
+      async function displayCart() {
+        try {
+            const response = await fetch("/current-cart");
+            const cart = await response.json();
     
-          cartItemsDiv.innerHTML = '';
+            const cartItemsDiv = document.getElementById("cart");
+            cartItemsDiv.innerHTML = "";
     
-          cartItems.forEach(item => {
-            const cartItemDiv = document.createElement('div');
-            cartItemDiv.classList.add('cart-item');
-            cartItemDiv.innerHTML = `
-              <h3>${item.name}</h3>
-              <p>${item.description}</p>
-              <p>Price: $${item.price.toFixed(2)}</p>
-            `;
-            cartItemsDiv.appendChild(cartItemDiv);
-          });
-        }*/
+            cart.forEach((item) => {
+              const itemDiv = document.createElement("div");
+              itemDiv.classList.add("cart-item");
+              itemDiv.innerHTML = `
+                <h3>Item name: ${item.name}</h3>
+                <p>Price: $${item.price}</p>
+                <button onclick="deleteItem('${item._id}')">Delete</button>
+              `;
+              cartItemsDiv.appendChild(itemDiv);
+            });
+          } catch (error) {
+            console.error(error);
+            alert("Error. Please try again.");
+          }
+      }
     
         async function proceedToPayment() {
           window.location.href = 'payment';
         }
+
+        async function deleteItem(cartItemId) {
+          if (!confirm("Are you sure you want to delete this item from your cart?")) {
+            return;
+          }
     
-        //displayCart();
+          try {
+            const response = await fetch("/current-cart/delete", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                cartItemId: cartItemId,
+              }),
+            });
+    
+            if (response.ok) {
+              alert("Item deleted successfully!");
+              displayCart();
+            } else {
+              alert("Error. Please try again.");
+            }
+          } catch (error) {
+            console.error(error);
+            alert("Error. Please try again.");
+          }
+        }
+    
+        window.onload = displayCart();
       </script>
   
     <button onclick="proceedToPayment()" id="payment-button">Proceed to Payment</button>
