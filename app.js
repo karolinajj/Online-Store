@@ -3,7 +3,10 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path')
 const app = express();
-app.use(express.static('views'));
+//const model = require('./models/models');
+
+app.use(express.static('style'));
+
 const PORT = process.env.PORT || 5000; //Hanna
 //const PORT = process.env.PORT || 3000; //Karolina
 
@@ -81,19 +84,6 @@ app.get('/show-orders', (req, res) => {
 app.get('/place-order', async (req, res) => {
   res.sendFile(path.join(__dirname, '/views/place-order.html'))
 })
-
-
-app.get('/admin/product-edit', async (req, res) => {
-  const productId = req.query.productId;
-  try {
-    const product = await Product.findOne({  _id: productId } );
-    res.sendFile(path.join(__dirname, '/views/edit.html'));
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
 
 //Anonymous user
 app.get('/products', async (req, res) => {
@@ -203,6 +193,16 @@ app.post('/products/add', async (req, res) => {
     const savedProduct = await newProduct.save();
 
     res.status(201).json(savedProduct);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+app.get('/admin/product-edit', async (req, res) => {
+  const productId = req.query.productId;
+  try {
+    const product = await Product.findOne({  _id: productId } );
+    res.sendFile(path.join(__dirname, '/views/edit.html'));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -343,34 +343,6 @@ app.post('/orders/delete', async (req, res) => {
   }
 });
 
-
-//some example tests
-
-/*let name = "nazwa produktu do koszyka"
-let price = 5
-const newCartItem = new CartItem({
-  name,
-  price
-});
-newCartItem.save()
-
-for (let i=0; i<3; i++){
-  var username = "username" + i;
-  var password = "PSWD";
-  var productName = "product name "  + i;
-  var productPrice =  i;
-  
-  const newUser = new User({
-    username, password
-  });
-  
-  newUser.save();
-  
-  const newOrder = new Order({
-    username, productName, productPrice
-  });
-  newOrder.save();
-}*/
 
 //Server
 app.listen(PORT, () => {

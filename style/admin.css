@@ -1,0 +1,94 @@
+body {
+    background-color: rgb(35, 34, 41);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
+    color: aliceblue;
+    margin-top: 30px;
+  }
+
+  h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+
+  .top-buttons {
+    text-align: right;
+    margin-right: 20px;
+  }
+
+  .top-buttons button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: rgb(219, 209, 209);
+    font-family: 'Gill Sans';
+    cursor: pointer;
+    margin-left: 10px;
+    width: auto;
+  }
+
+  .add-product-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  label {
+    font-size: 20px;
+    margin-top: 20px;
+    display: block;
+    width: 48%;
+  }
+
+  input, button {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 48%;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: rgb(219, 209, 209);
+    cursor: pointer;
+  }
+
+  #productList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 20px auto;
+  }
+
+  .product {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    width: 300px;
+    color: black;
+  }
+
+  #usersList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 20px auto;
+  }
+
+  .user {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px;
+      width: 300px;
+      color: black;
+  }
