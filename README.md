@@ -13,8 +13,3 @@ node app.js
 ```
 
 Projekt jest w trakcie poprawek.
-
-# To do:
-- logowanie
-- rodzielenie pliku app.js na mniejsze, zawierające konfigurację bazy danych, widoki i podzielone funkcje
-- ...
